@@ -86,9 +86,8 @@ class Shape(object):
         elif s == 'Solid':
             tr = Solid(obj)
         elif s == 'Compound':
-            #compound of solids, lets return a solid instead
             if len(obj.Solids) > 1:
-                tr = Solid(obj)
+                tr = Compound(obj)
             elif len(obj.Solids) == 1:
                 tr = Solid(obj.Solids[0])
             elif len(obj.Wires) > 0:
