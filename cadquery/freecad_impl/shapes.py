@@ -879,8 +879,21 @@ class Compound(Shape):
         c = FreeCADPart.Compound(solids)
         return Shape.cast(c)
 
-    def fuse(self, toJoin):
-        return Shape.cast(self.wrapped.fuse(toJoin.wrapped))
+    def fuse(self, toJoin=None):
+        """
+        Fuses compound to given shape. If `toJoin` is none, tries to fuse
+        contained solids together and create a single Solid.
+        """
+        if toJoin:
+            return Shape.cast(self.wrapped.fuse(toJoin.wrapped))
+        else:
+            if len(self.wrapped.Solids) > 1:
+                fused = self.wrapped.Solids[0]
+                for s in self.wrapped.Solids[1:]:
+                    fused = fused.fuse(s)
+                return Shape.cast(fused)
+            else:
+                return self
 
     def tessellate(self, tolerance):
         return self.wrapped.tessellate(tolerance)
