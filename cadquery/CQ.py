@@ -1928,6 +1928,7 @@ class Workplane(CQ):
             selected may not be planar
         """
         r = self._extrude(distance)  # returns a Solid (or a compound if there were multiple)
+        if r.ShapeType() == 'Compound': r = r.fuse()
         if combine:
             newS = self._combineWithBase(r)
         else:
@@ -2121,6 +2122,7 @@ class Workplane(CQ):
         """
         #first, make the object
         toCut = self._extrude(distanceToCut)
+        if toCut.ShapeType() == 'Compound': toCut = toCut.fuse()
 
         #now find a solid in the chain
 
